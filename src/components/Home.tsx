@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Snackbar from "../components/Snackbar"
-import { solve, findZero} from "../util";
+import { solve } from "../util";
 import "../css/Home.css";
 type Props = {};
 
@@ -56,7 +56,7 @@ export default class Home extends Component<Props, State> {
   render() {
     return (
       <>
-        <h1 className="title">Solvoku</h1>
+        <h1 className="title">Sulvoku</h1>
         <div className="grid">
           {this.state.board.map((row, rowIndex) => {
             return (
