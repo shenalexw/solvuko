@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/solvuko/static/css/main.1b6befb5.css",
+    "main.js": "/solvuko/static/js/main.c7fbc85d.js",
+    "index.html": "/solvuko/index.html",
+    "main.1b6befb5.css.map": "/solvuko/static/css/main.1b6befb5.css.map",
+    "main.c7fbc85d.js.map": "/solvuko/static/js/main.c7fbc85d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1b6befb5.css",
+    "static/js/main.c7fbc85d.js"
+  ]
+}
