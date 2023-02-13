@@ -19,7 +19,7 @@ This project is a revival of my first project where I created a cli sudoku solve
 
 ## How To Use
 
-Use the following link: ###
+Use the following link: https://shenalexw.github.io/solvuko/
 
 ---
 
