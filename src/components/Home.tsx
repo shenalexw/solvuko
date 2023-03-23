@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import Snackbar from "../components/Snackbar"
+import React, { Component, RefObject  } from "react";
+import Snackbar from "./Snackbar"
+import Cell from "./Cell";
 import { solve } from "../util";
 import "../css/Home.css";
 type Props = {};
@@ -10,9 +11,9 @@ type State = {
 };
 
 export default class Home extends Component<Props, State> {
+  private myRef: RefObject<HTMLDivElement>;
   constructor(props: Props) {
     super(props);
-
     this.state = {
       board: [
         [7, 8, 0, 4, 0, 0, 1, 2, 0],
@@ -27,16 +28,18 @@ export default class Home extends Component<Props, State> {
       ],
       message: ""
     };
-
+    this.myRef = React.createRef<HTMLDivElement>();
+    this.handleClick = this.handleClick.bind(this);
     this.handleClearMessage = this.handleClearMessage.bind(this);
+    this.handleUpdateCell = this.handleUpdateCell.bind(this);
   }
 
   handleSolve(): void {
     // Make a deepcopy
-    var newBoard = JSON.parse(JSON.stringify(this.state.board));
+    let newBoard = JSON.parse(JSON.stringify(this.state.board));
     const boolSolved : Boolean = solve(newBoard)
     console.log(boolSolved);
-    this.handleChangeMessage( boolSolved ? "Puzzle has been Solved!" : "Uh Oh something went wrong :(");
+    this.handleChangeMessage( boolSolved ? "Puzzle has been Solved!" : "Uh Oh something went wrong :");
     this.setState({ board: newBoard });
   }
 
@@ -53,6 +56,20 @@ export default class Home extends Component<Props, State> {
     this.setState({message: ""})
   }
 
+  handleClick(): void {
+    if (this.myRef.current) {
+      this.myRef.current.focus();
+    }
+  }
+
+  handleUpdateCell(value: number, rowIndex: number, colIndex: number): void{
+    let newBoard = JSON.parse(JSON.stringify(this.state.board));
+    newBoard[rowIndex][colIndex] = value
+    this.setState({
+      board: newBoard
+    })
+  }
+
   render() {
     return (
       <>
@@ -62,7 +79,8 @@ export default class Home extends Component<Props, State> {
             return (
               <div className="grid-row" key={rowIndex}>
                 {row.map((num, colIndex) => (
-                  <div className="grid-block" key={colIndex}>{num}</div>
+                  // <div ref={this.myRef} tabIndex={0} className="grid-block" key={colIndex} onClick={this.handleClick} onFocus={(event) => this.handleKeyDown(event)}>{num}</div>
+                  <Cell key={colIndex} rowIndex={rowIndex} colIndex={colIndex} number={num} handleCellUpdate={this.handleUpdateCell}/>
                 ))}
               </div>
             );

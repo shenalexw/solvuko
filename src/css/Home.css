@@ -46,6 +46,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  border: none;
+  outline: none;
 }
 
 .grid-block:nth-child(3n) {
@@ -79,4 +82,9 @@ body {
 
 .basic-button:hover {
   background-color: #b5bad9a8;
+}
+
+.grid-block:focus {
+  background-color: #b5bad9a8;
+  border: none;
 }
