@@ -17,8 +17,8 @@ export default class Cell extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.myRef = React.createRef<HTMLDivElement>();
     this.state = { focused: false };
+    this.myRef = React.createRef<HTMLDivElement>();
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -50,7 +50,8 @@ export default class Cell extends React.Component<Props, State> {
     return (
        this.props.static ? 
        <div className='grid-block bold'>{this.props.number}</div>:
-       <div 
+       <div
+       id={String(this.props.rowIndex) + ":" + String(this.props.colIndex)}
         onClick={(): void => this.myRef.current?.focus()}
         ref={this.myRef}
         tabIndex={0}

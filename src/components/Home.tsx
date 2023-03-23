@@ -1,7 +1,7 @@
 import React, { Component, RefObject  } from "react";
 import Snackbar from "./Snackbar"
 import Cell from "./Cell";
-import { solve } from "../util";
+import { isValid, solve } from "../util";
 import "../css/Home.css";
 type Props = {};
 
@@ -42,6 +42,7 @@ export default class Home extends Component<Props, State> {
     this.handleClearMessage = this.handleClearMessage.bind(this);
     this.handleUpdateCell = this.handleUpdateCell.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
   }
 
   handleSolve(): void {
@@ -74,12 +75,37 @@ export default class Home extends Component<Props, State> {
   }
 
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void{
+    const cell = document.getElementById(String(rowIndex) + ":" + String(colIndex));
+    // if(Number(cell!.innerHTML) === value){return}
+    
+    if (value === 0) {
+      cell!.className = "grid-block" 
+    } else if (!isValid(this.state.board, rowIndex, colIndex, value)){
+      cell!.className = "grid-block red" 
+    } else{
+      cell!.className = "grid-block gray" 
+    }
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     newBoard[rowIndex][colIndex] = value
     this.setState({
       board: newBoard
     })
   }
+
+  handleValidation():void {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (this.state.originalBoard[i][j] === 0){
+          const check = isValid(this.state.board, i, j, this.state.board[i][j])
+          if(!check){
+            const cell = document.getElementById(String(i) + ":" + String(j));
+            cell!.className = "grid-block red" ;
+          }
+        }
+     }
+    }
+   }
+
 
   render() {
     return (
@@ -97,10 +123,8 @@ export default class Home extends Component<Props, State> {
           })}
         </div>
         <div className="button-options">
-          <button className="basic-button" onClick={() => this.handleGenerate()}>Validate</button>
+          <button className="basic-button" onClick={() => this.handleValidation()}>Validate</button>
           <button className="basic-button" onClick={() => this.handleSolve()}>Solve</button>
-        </div>
-        <div className="button-options">
           <button className="basic-button" onClick={() => this.handleGenerate()}>Generate</button>
           <button className="basic-button" onClick={() => this.handleReset()}>Reset</button>
         </div>
