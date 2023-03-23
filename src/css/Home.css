@@ -51,6 +51,11 @@ body {
   outline: none;
 }
 
+.grid-block:focus {
+  background-color: #b5bad9a8;
+  border: none;
+}
+
 .grid-block:nth-child(3n) {
   margin-right: 10px;
 }
@@ -84,7 +89,6 @@ body {
   background-color: #b5bad9a8;
 }
 
-.grid-block:focus {
-  background-color: #b5bad9a8;
-  border: none;
+.bold{
+  font-weight: bolder;
 }

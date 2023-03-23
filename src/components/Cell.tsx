@@ -1,6 +1,7 @@
 import React, { RefObject } from 'react';
 
 type Props = {
+    static: boolean
     number: number
     rowIndex: number
     colIndex: number
@@ -37,7 +38,6 @@ export default class Cell extends React.Component<Props, State> {
       if (!isNumber) {
         event.preventDefault();
       } else {
-        console.log(Number(event.key))
         this.props.handleCellUpdate(Number(event.key), this.props.rowIndex, this.props.colIndex)
       }
     }
@@ -45,6 +45,8 @@ export default class Cell extends React.Component<Props, State> {
 
   render() {
     return (
+       this.props.static ? 
+       <div className='grid-block bold'>{this.props.number}</div>:
        <div 
         onClick={(): void => this.myRef.current?.focus()}
         ref={this.myRef}
