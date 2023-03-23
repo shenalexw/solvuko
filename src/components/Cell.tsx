@@ -33,13 +33,16 @@ export default class Cell extends React.Component<Props, State> {
   }
 
   handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-    if (this.state.focused) {
-      const isNumber = /^\d$/.test(event.key);
-      if (!isNumber) {
-        event.preventDefault();
-      } else {
-        this.props.handleCellUpdate(Number(event.key), this.props.rowIndex, this.props.colIndex)
-      }
+    if (!this.state.focused) {
+      return
+    }
+
+    if (event.key === "Backspace") {
+      this.props.handleCellUpdate(0, this.props.rowIndex, this.props.colIndex);
+    } else if (/^\d$/.test(event.key)) {
+      this.props.handleCellUpdate(Number(event.key), this.props.rowIndex, this.props.colIndex);
+    } else {
+      event.preventDefault();
     }
   }
 

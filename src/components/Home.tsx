@@ -90,7 +90,6 @@ export default class Home extends Component<Props, State> {
             return (
               <div className="grid-row" key={rowIndex}>
                 {row.map((num, colIndex) => (
-                  // <div ref={this.myRef} tabIndex={0} className="grid-block" key={colIndex} onClick={this.handleClick} onFocus={(event) => this.handleKeyDown(event)}>{num}</div>
                   <Cell key={colIndex} rowIndex={rowIndex} colIndex={colIndex} number={num} handleCellUpdate={this.handleUpdateCell} static={this.state.originalBoard[rowIndex][colIndex] !== 0 ? true : false}/>
                 ))}
               </div>
@@ -98,8 +97,11 @@ export default class Home extends Component<Props, State> {
           })}
         </div>
         <div className="button-options">
-          <button className="basic-button" onClick={() => this.handleGenerate()}>Generate</button>
+          <button className="basic-button" onClick={() => this.handleGenerate()}>Validate</button>
           <button className="basic-button" onClick={() => this.handleSolve()}>Solve</button>
+        </div>
+        <div className="button-options">
+          <button className="basic-button" onClick={() => this.handleGenerate()}>Generate</button>
           <button className="basic-button" onClick={() => this.handleReset()}>Reset</button>
         </div>
         <Snackbar message={this.state.message} clearMessage={this.handleClearMessage}/>
