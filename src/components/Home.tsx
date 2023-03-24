@@ -27,6 +27,7 @@ export default class Home extends Component<Props, State> {
     this.handleReset = this.handleReset.bind(this);
     this.generateNewBoard = this.generateNewBoard.bind(this);
     this.handleDifficulty = this.handleDifficulty.bind(this);
+    this.handleValidationofRed = this.handleValidationofRed.bind(this);
   }
 
   componentDidMount() {
@@ -88,10 +89,14 @@ export default class Home extends Component<Props, State> {
   }
 
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void {
+    if (value === this.state.board[rowIndex][colIndex] && value !== 0){
+      return
+    }
+
     const cell = document.getElementById(
       String(rowIndex) + ":" + String(colIndex)
     );
-
+    
     if (value === 0) {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
@@ -104,7 +109,19 @@ export default class Home extends Component<Props, State> {
     newBoard[rowIndex][colIndex] = value;
     this.setState({
       board: newBoard,
+    },() => {
+      if (value === 0) {this.handleValidationofRed()};
     });
+  }
+
+  handleValidationofRed(): void{
+    let redBlocks = document.getElementsByClassName("red")
+    for (let i = 0; i < redBlocks.length; i++) {
+      const indexArr = redBlocks[i].id.split(":")
+      if (isValid(this.state.board, Number(indexArr[0]), Number(indexArr[1]), Number(redBlocks[i].innerHTML))){
+        redBlocks[i].className = "grid-block"
+      }
+    }
   }
 
   handleDifficulty(difficulty: string): void {
@@ -128,7 +145,7 @@ export default class Home extends Component<Props, State> {
   render() {
     return (
       <>
-        <h1 className="title">Sulvoku</h1>
+        <div className="title">Sulvoku</div>
         <div className="button-options" id="difficulty-buttons">
           <button
             className="basic-button"

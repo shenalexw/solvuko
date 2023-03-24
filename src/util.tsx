@@ -12,7 +12,7 @@ export function isValid(
 ): boolean {
   let newBoard = board;
   if (board[row][col] !== 0) {
-    newBoard = [...board]
+    newBoard = JSON.parse(JSON.stringify(board));
     newBoard[row][col] = 0
   }
   for (let i = 0; i < 9; i++) {
