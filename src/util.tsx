@@ -61,24 +61,16 @@ export function findZero(board: number[][]): { row: number; col: number } {
 
 export function newBoard(difficulty: string): number[][] {
   let grid = new Array(9).fill(null).map(() => new Array(9).fill(0));
-  for (let i = 0; i < 9; i += 3) {
-    for (let j = 0; j < 9; j += 3) {
-      for (let k = i; k < i + 3; k++) {
-        for (let l = j; l < j + 3; l++) {
-          if (k === l) {
-            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-            while (numbers.length > 0) {
-              const index = Math.floor(Math.random() * numbers.length);
-              const num = numbers[index];
-              if (isValid(grid, k, l, num)) {
-                grid[k][l] = num;
-              }
-              numbers.splice(index, 1);
-            }
-          }
-        }
-      }
+  let gridIndex = 8
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  while (numbers.length > 0 || gridIndex > 0) {
+    const index = Math.floor(Math.random() * numbers.length);
+    const num = numbers[index];
+    if (isValid(grid, gridIndex, gridIndex, num)) {
+      grid[gridIndex][gridIndex] = num;
+      gridIndex -= 1
     }
+    numbers.splice(index, 1);
   }
   solve(grid);
   randomFillZero(grid, difficultyDict[difficulty]);
