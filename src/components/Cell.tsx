@@ -39,7 +39,13 @@ export default class Cell extends React.Component<Props, State> {
 
     if (event.key === "Backspace") {
       this.props.handleCellUpdate(0, this.props.rowIndex, this.props.colIndex);
-    } else if (/^\d$/.test(event.key)) {
+    } else if (event.key === "Tab"){
+      this.setState({
+        focused: false
+      })
+      this.myRef.current?.blur();
+    }
+    else if (/^\d$/.test(event.key)) {
       this.props.handleCellUpdate(Number(event.key), this.props.rowIndex, this.props.colIndex);
     } else {
       event.preventDefault();
@@ -51,7 +57,7 @@ export default class Cell extends React.Component<Props, State> {
        this.props.static ? 
        <div className='grid-block bold'>{this.props.number}</div>:
        <div
-       id={String(this.props.rowIndex) + ":" + String(this.props.colIndex)}
+        id={String(this.props.rowIndex) + ":" + String(this.props.colIndex)}
         onClick={(): void => this.myRef.current?.focus()}
         ref={this.myRef}
         tabIndex={0}
@@ -60,7 +66,7 @@ export default class Cell extends React.Component<Props, State> {
         onKeyDown={this.handleKeyDown}
         className="grid-block" 
       >
-        {this.props.number}{/* {this.state.focused ? 'Focused' : this.props.number} */}
+        {this.props.number === 0 ? "" : this.props.number}{/* {this.state.focused ? 'Focused' : this.props.number} */}
       </div> 
     );
   }

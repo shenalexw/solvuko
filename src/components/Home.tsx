@@ -1,7 +1,7 @@
-import React, { Component, RefObject  } from "react";
+import { Component} from "react";
 import Snackbar from "./Snackbar"
 import Cell from "./Cell";
-import { isValid, solve } from "../util";
+import { isValid, solve, newBoard } from "../util";
 import "../css/Home.css";
 type Props = {};
 
@@ -37,25 +37,42 @@ export default class Home extends Component<Props, State> {
         [1, 2, 0, 0, 0, 7, 4, 0, 0],
         [0, 4, 9, 2, 0, 6, 0, 0, 7],
       ],
-      message: ""
+      message: "",
     };
     this.handleClearMessage = this.handleClearMessage.bind(this);
     this.handleUpdateCell = this.handleUpdateCell.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
+    this.generateNewBoard = this.generateNewBoard.bind(this);
+  }
+
+  resetRed(): void{
+    const gridBlocks = document.querySelectorAll(".grid-block.red");
+    for (let i = 0; i < gridBlocks.length; i++) {
+      gridBlocks[i].className = "grid-block";
+    }
   }
 
   handleSolve(): void {
     // Make a deepcopy
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     const boolSolved : Boolean = solve(newBoard)
-    console.log(boolSolved);
-    this.handleChangeMessage( boolSolved ? "Puzzle has been Solved!" : "Uh Oh something went wrong :");
-    this.setState({ board: newBoard });
+    if (boolSolved){
+      this.resetRed();
+      this.handleChangeMessage("Puzzle has been Solved");
+      this.setState({ board: newBoard });
+      return
+    }
+    this.handleChangeMessage("Puzzle in Unsolvable");
   }
 
-  handleGenerate(): void {
-    this.handleChangeMessage( "Puzzle has been generated!");
+  generateNewBoard(): void {
+    const brandNewBoard: number[][] = newBoard();
+    this.setState({
+      originalBoard: brandNewBoard,
+      board: brandNewBoard,
+    });
+    this.handleChangeMessage("Puzzle has been generated")
   }
 
   handleChangeMessage(message: string): void{
@@ -71,6 +88,7 @@ export default class Home extends Component<Props, State> {
     this.setState({
       board: this.state.originalBoard
     })
+    this.resetRed();
     this.handleChangeMessage("Board has been reset")
   }
 
@@ -82,9 +100,10 @@ export default class Home extends Component<Props, State> {
       cell!.className = "grid-block" 
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)){
       cell!.className = "grid-block red" 
-    } else{
-      cell!.className = "grid-block gray" 
+    } else {
+      cell!.className = "grid-block" 
     }
+    
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     newBoard[rowIndex][colIndex] = value
     this.setState({
@@ -93,6 +112,7 @@ export default class Home extends Component<Props, State> {
   }
 
   handleValidation():void {
+    let validBool = true
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (this.state.originalBoard[i][j] === 0){
@@ -100,10 +120,12 @@ export default class Home extends Component<Props, State> {
           if(!check){
             const cell = document.getElementById(String(i) + ":" + String(j));
             cell!.className = "grid-block red" ;
+            validBool = false
           }
         }
      }
     }
+    this.handleChangeMessage(validBool ? "Board contains all valid moves" : "Board contains invalid moves")
    }
 
 
@@ -125,7 +147,7 @@ export default class Home extends Component<Props, State> {
         <div className="button-options">
           <button className="basic-button" onClick={() => this.handleValidation()}>Validate</button>
           <button className="basic-button" onClick={() => this.handleSolve()}>Solve</button>
-          <button className="basic-button" onClick={() => this.handleGenerate()}>Generate</button>
+          <button className="basic-button" onClick={() => this.generateNewBoard()}>Generate</button>
           <button className="basic-button" onClick={() => this.handleReset()}>Reset</button>
         </div>
         <Snackbar message={this.state.message} clearMessage={this.handleClearMessage}/>

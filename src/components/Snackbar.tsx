@@ -38,8 +38,7 @@ export default class Snackbar extends Component<Props, State> {
   
     render() {
       return this.state.visible && this.props.message !== "" ? <div className="snackbar">
-        {this.props.message}
-        <div className='close-snackbar'>X</div>
+        <div>{this.props.message}</div>
       </div> : null;
     }
 }

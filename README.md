@@ -27,6 +27,7 @@ Use the following link: https://shenalexw.github.io/solvuko/
 
 https://blog.logrocket.com/async-await-in-typescript/
 https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/
+https://www.geeksforgeeks.org/program-sudoku-generator/
 
 ## Learning Points
 
