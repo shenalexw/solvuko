@@ -15,6 +15,8 @@
 
 This project is a revival of my first project where I created a cli sudoku solver using python and a backtracking algorithem. Giving it a fresh new look using React and TypeScript I wanted to give it new life to reflect my progress in front end development!
 
+Old Project: https://github.com/shenalexw/Sudoku
+
 ---
 
 ## How To Use
@@ -25,9 +27,9 @@ Use the following link: https://shenalexw.github.io/solvuko/
 
 ## References
 
-https://blog.logrocket.com/async-await-in-typescript/
-https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/
-https://www.geeksforgeeks.org/program-sudoku-generator/
+- [Async Await in TypeScript](https://blog.logrocket.com/async-await-in-typescript/)
+- [Python Project Sudoku Solver](https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/)
+- [How to generate a sudoku puzzle in javaScript](https://www.geeksforgeeks.org/program-sudoku-generator/)
 
 ## Learning Points
 
