@@ -11,6 +11,10 @@ export function isValid(
   k: number
 ): boolean {
   let newBoard = board;
+  if (board[row][col] !== 0) {
+    newBoard = [...board]
+    newBoard[row][col] = 0
+  }
   for (let i = 0; i < 9; i++) {
     const m = 3 * Math.floor(row / 3) + Math.floor(i / 3);
     const n = 3 * Math.floor(col / 3) + (i % 3);
