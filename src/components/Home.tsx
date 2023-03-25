@@ -28,6 +28,7 @@ export default class Home extends Component<Props, State> {
     this.generateNewBoard = this.generateNewBoard.bind(this);
     this.handleDifficulty = this.handleDifficulty.bind(this);
     this.handleValidationofRed = this.handleValidationofRed.bind(this);
+    this.handleBlank = this.handleBlank.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +70,7 @@ export default class Home extends Component<Props, State> {
     this.handleChangeMessage(
       this.state.difficulty + " puzzle has been generated"
     );
+    this.resetRed();
   }
 
   handleChangeMessage(message: string): void {
@@ -89,14 +91,14 @@ export default class Home extends Component<Props, State> {
   }
 
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void {
-    if (value === this.state.board[rowIndex][colIndex] && value !== 0){
-      return
+    if (value === this.state.board[rowIndex][colIndex] && value !== 0) {
+      return;
     }
 
     const cell = document.getElementById(
       String(rowIndex) + ":" + String(colIndex)
     );
-    
+
     if (value === 0) {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
@@ -107,19 +109,31 @@ export default class Home extends Component<Props, State> {
 
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     newBoard[rowIndex][colIndex] = value;
-    this.setState({
-      board: newBoard,
-    },() => {
-      if (value === 0) {this.handleValidationofRed()};
-    });
+    this.setState(
+      {
+        board: newBoard,
+      },
+      () => {
+        if (value === 0) {
+          this.handleValidationofRed();
+        }
+      }
+    );
   }
 
-  handleValidationofRed(): void{
-    let redBlocks = document.getElementsByClassName("red")
+  handleValidationofRed(): void {
+    let redBlocks = document.getElementsByClassName("red");
     for (let i = 0; i < redBlocks.length; i++) {
-      const indexArr = redBlocks[i].id.split(":")
-      if (isValid(this.state.board, Number(indexArr[0]), Number(indexArr[1]), Number(redBlocks[i].innerHTML))){
-        redBlocks[i].className = "grid-block"
+      const indexArr = redBlocks[i].id.split(":");
+      if (
+        isValid(
+          this.state.board,
+          Number(indexArr[0]),
+          Number(indexArr[1]),
+          Number(redBlocks[i].innerHTML)
+        )
+      ) {
+        redBlocks[i].className = "grid-block";
       }
     }
   }
@@ -142,30 +156,59 @@ export default class Home extends Component<Props, State> {
     });
   }
 
+  handleBlank(): void {
+    this.setState({
+      originalBoard: Array(9)
+        .fill(null)
+        .map(() => new Array(9).fill(0)),
+      board: Array(9)
+        .fill(null)
+        .map(() => new Array(9).fill(0)),
+    });
+    this.handleChangeMessage("Board is now empty");
+  }
+
   render() {
     return (
       <>
         <div className="title">Sulvoku</div>
-        <div className="button-options" id="difficulty-buttons">
-          <button
-            className="basic-button"
-            onClick={() => this.handleDifficulty("Easy")}
-          >
-            Easy
-          </button>
-          <button
-            className="basic-button"
-            onClick={() => this.handleDifficulty("Medium")}
-          >
-            Medium
-          </button>
-          <button
-            className="basic-button"
-            onClick={() => this.handleDifficulty("Hard")}
-          >
-            Hard
-          </button>
+        <div className="center-row-flex">
+          <div className="space-between-flex">
+            <div id="difficulty-buttons">
+              <button
+                className="basic-button"
+                onClick={() => this.handleDifficulty("Easy")}
+              >
+                Easy
+              </button>
+              <button
+                className="basic-button"
+                onClick={() => this.handleDifficulty("Medium")}
+              >
+                Medium
+              </button>
+              <button
+                className="basic-button"
+                onClick={() => this.handleDifficulty("Hard")}
+              >
+                Hard
+              </button>
+              
+            </div>
+            <div>
+            <button
+                className="basic-button"
+                onClick={() => this.generateNewBoard()}
+              >
+                Generate
+              </button>
+              <button className="basic-button" onClick={() => this.handleBlank()}>
+              Blank
+            </button>
+            </div>
+          </div>
         </div>
+
         <div className="grid">
           {this.state.board.map((row, rowIndex) => {
             return (
@@ -188,20 +231,17 @@ export default class Home extends Component<Props, State> {
             );
           })}
         </div>
-        <div className="button-options">
-          <button className="basic-button" onClick={() => this.handleSolve()}>
-            Solve
-          </button>
-          <button
-            className="basic-button"
-            onClick={() => this.generateNewBoard()}
-          >
-            Generate
-          </button>
-          <button className="basic-button" onClick={() => this.handleReset()}>
-            Reset
-          </button>
-        </div>
+
+            <div className="center-row-flex">
+            <button className="basic-button" onClick={() => this.handleSolve()}>
+              Solve
+            </button>
+            <button className="basic-button" onClick={() => this.handleReset()}>
+              Reset
+            </button>
+            </div>
+            
+        
         <Snackbar
           message={this.state.message}
           clearMessage={this.handleClearMessage}

@@ -67,12 +67,20 @@ body {
   margin-right: 0px;
 }
 
-.button-options {
+.center-row-flex {
   padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
+
+.space-between-flex{
+  display: flex;
+  width: 500px;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .basic-button {
   background-color: #d9d0b5;
   border: none;

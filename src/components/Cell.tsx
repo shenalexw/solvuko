@@ -36,6 +36,54 @@ export default class Cell extends React.Component<Props, State> {
     if (!this.state.focused) {
       return;
     }
+    
+    if(event.key==="ArrowUp"){
+      let newRowIndex = this.props.rowIndex
+      while(newRowIndex !== 0){
+        newRowIndex -= 1
+        if (0 > newRowIndex || newRowIndex > 8){return}
+        const cell = document.getElementById(String(newRowIndex) + ":" + String(this.props.colIndex))
+        if (cell !== null){
+          cell.focus()
+          return
+        }
+      }
+    } else if(event.key==="ArrowDown") {
+      console.log("gegegeg")
+      let newRowIndex = this.props.rowIndex
+      while(newRowIndex !== 8){
+        newRowIndex += 1
+        if (0 > newRowIndex || newRowIndex > 8){return}
+        const cell = document.getElementById(String(newRowIndex) + ":" + String(this.props.colIndex))
+        if (cell !== null){
+          cell.focus()
+          return
+        }
+      }
+    } else if(event.key==="ArrowRight") {
+      let newColIndex = this.props.colIndex
+      while(newColIndex !== 8){
+        newColIndex += 1
+        if (0 > newColIndex || newColIndex> 8){return}
+        const cell = document.getElementById(String(this.props.rowIndex) + ":" + String(newColIndex))
+        if (cell !== null){
+          cell.focus()
+          return
+        }
+      }
+    } else if(event.key==="ArrowLeft") {
+      let newColIndex = this.props.colIndex
+      while(newColIndex !== 0){
+        newColIndex -= 1
+        if (0 > newColIndex || newColIndex> 8){return}
+        const cell = document.getElementById(String(this.props.rowIndex) + ":" + String(newColIndex))
+        if (cell !== null){
+          cell.focus()
+          return
+        }
+      }
+    }
+
 
     if (event.key === "Backspace") {
       this.props.handleCellUpdate(0, this.props.rowIndex, this.props.colIndex);
