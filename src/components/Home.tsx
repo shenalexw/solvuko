@@ -166,6 +166,7 @@ export default class Home extends Component<Props, State> {
         .map(() => new Array(9).fill(0)),
     });
     this.handleChangeMessage("Board is now empty");
+    this.resetRed();
   }
 
   render() {

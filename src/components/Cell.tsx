@@ -49,7 +49,6 @@ export default class Cell extends React.Component<Props, State> {
         }
       }
     } else if(event.key==="ArrowDown") {
-      console.log("gegegeg")
       let newRowIndex = this.props.rowIndex
       while(newRowIndex !== 8){
         newRowIndex += 1
