@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React from "react";
 
 type Props = {
   static: boolean;
@@ -13,12 +13,9 @@ type State = {
 };
 
 export default class Cell extends React.Component<Props, State> {
-  private myRef: RefObject<HTMLDivElement>;
-
   constructor(props: Props) {
     super(props);
     this.state = { focused: false };
-    this.myRef = React.createRef<HTMLDivElement>();
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -36,61 +33,60 @@ export default class Cell extends React.Component<Props, State> {
     if (!this.state.focused) {
       return;
     }
-    
-    if(event.key==="ArrowUp"){
-      let newRowIndex = this.props.rowIndex
-      while(newRowIndex !== 0){
-        newRowIndex -= 1
-        if (0 > newRowIndex || newRowIndex > 8){return}
-        const cell = document.getElementById(String(newRowIndex) + ":" + String(this.props.colIndex))
-        if (cell !== null){
-          cell.focus()
-          return
-        }
+
+    if (
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight"
+    ) {
+      let newRowIndex = this.props.rowIndex;
+      let newColIndex = this.props.colIndex;
+
+      switch (event.key) {
+        case "ArrowUp":
+          newRowIndex -= 1;
+          break;
+        case "ArrowDown":
+          newRowIndex += 1;
+          break;
+        case "ArrowRight":
+          newColIndex += 1;
+          break;
+        case "ArrowLeft":
+          newColIndex -= 1;
+          break;
+        default:
+          return;
       }
-    } else if(event.key==="ArrowDown") {
-      let newRowIndex = this.props.rowIndex
-      while(newRowIndex !== 8){
-        newRowIndex += 1
-        if (0 > newRowIndex || newRowIndex > 8){return}
-        const cell = document.getElementById(String(newRowIndex) + ":" + String(this.props.colIndex))
-        if (cell !== null){
-          cell.focus()
-          return
-        }
+
+      if (
+        newRowIndex < 0 ||
+        newRowIndex > 8 ||
+        newColIndex < 0 ||
+        newColIndex > 8
+      ) {
+        return;
       }
-    } else if(event.key==="ArrowRight") {
-      let newColIndex = this.props.colIndex
-      while(newColIndex !== 8){
-        newColIndex += 1
-        if (0 > newColIndex || newColIndex> 8){return}
-        const cell = document.getElementById(String(this.props.rowIndex) + ":" + String(newColIndex))
-        if (cell !== null){
-          cell.focus()
-          return
-        }
-      }
-    } else if(event.key==="ArrowLeft") {
-      let newColIndex = this.props.colIndex
-      while(newColIndex !== 0){
-        newColIndex -= 1
-        if (0 > newColIndex || newColIndex> 8){return}
-        const cell = document.getElementById(String(this.props.rowIndex) + ":" + String(newColIndex))
-        if (cell !== null){
-          cell.focus()
-          return
-        }
+
+      const cell = document.getElementById(`${newRowIndex}:${newColIndex}`);
+      if (cell !== null) {
+        cell!.focus();
+        this.setState({
+          focused: false,
+        });
+        return;
       }
     }
-
-
+    if (this.props.static) {
+      return;
+    }
     if (event.key === "Backspace") {
       this.props.handleCellUpdate(0, this.props.rowIndex, this.props.colIndex);
     } else if (event.key === "Tab") {
       this.setState({
         focused: false,
       });
-      this.myRef.current?.blur();
     } else if (/^\d$/.test(event.key)) {
       this.props.handleCellUpdate(
         Number(event.key),
@@ -103,18 +99,14 @@ export default class Cell extends React.Component<Props, State> {
   }
 
   render() {
-    return this.props.static ? (
-      <div className="grid-block bold">{this.props.number}</div>
-    ) : (
+    return (
       <div
         id={String(this.props.rowIndex) + ":" + String(this.props.colIndex)}
-        onClick={(): void => this.myRef.current?.focus()}
-        ref={this.myRef}
         tabIndex={0}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
-        className="grid-block"
+        className={this.props.static ? "grid-block bold" : "grid-block"}
       >
         {this.props.number === 0 ? "" : this.props.number}
       </div>

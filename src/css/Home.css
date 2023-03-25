@@ -52,6 +52,7 @@ body {
   text-align: center;
   border: none;
   outline: none;
+  caret-color: transparent;
 }
 
 .grid-block:focus {
@@ -103,6 +104,10 @@ body {
   font-weight: 900;
   font-size: 20px;
   color: black;
+}
+
+.bold:focus{
+  background-color: lightcoral;
 }
 
 .red {
