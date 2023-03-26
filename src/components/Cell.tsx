@@ -72,9 +72,6 @@ export default class Cell extends React.Component<Props, State> {
       const cell = document.getElementById(`${newRowIndex}:${newColIndex}`);
       if (cell !== null) {
         cell!.focus();
-        this.setState({
-          focused: false,
-        });
         return;
       }
     }

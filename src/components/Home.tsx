@@ -1,7 +1,10 @@
 import { Component } from "react";
+import Help from "./Help";
 import Snackbar from "./Snackbar";
 import Cell from "./Cell";
 import { isValid, solve, newBoard } from "../util";
+import Confetti from "react-confetti";
+import { AiOutlineQuestion } from "react-icons/ai";
 import "../css/Home.css";
 type Props = {};
 
@@ -10,6 +13,8 @@ type State = {
   board: number[][];
   message: string;
   difficulty: string;
+  win: boolean;
+  displayHelp: boolean;
 };
 
 export default class Home extends Component<Props, State> {
@@ -20,6 +25,8 @@ export default class Home extends Component<Props, State> {
       board: [],
       message: "",
       difficulty: "Easy",
+      win: false,
+      displayHelp: false,
     };
 
     this.handleClearMessage = this.handleClearMessage.bind(this);
@@ -29,6 +36,7 @@ export default class Home extends Component<Props, State> {
     this.handleDifficulty = this.handleDifficulty.bind(this);
     this.handleValidationofRed = this.handleValidationofRed.bind(this);
     this.handleBlank = this.handleBlank.bind(this);
+    this.handleDisplayHelp = this.handleDisplayHelp.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +74,7 @@ export default class Home extends Component<Props, State> {
     this.setState({
       originalBoard: brandNewBoard,
       board: brandNewBoard,
+      win: false,
     });
     this.handleChangeMessage(
       this.state.difficulty + " puzzle has been generated"
@@ -78,7 +87,6 @@ export default class Home extends Component<Props, State> {
   }
 
   handleClearMessage(): void {
-    console.log("message cleared");
     this.setState({ message: "" });
   }
 
@@ -94,11 +102,9 @@ export default class Home extends Component<Props, State> {
     if (value === this.state.board[rowIndex][colIndex] && value !== 0) {
       return;
     }
-
     const cell = document.getElementById(
       String(rowIndex) + ":" + String(colIndex)
     );
-
     if (value === 0) {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
@@ -114,11 +120,35 @@ export default class Home extends Component<Props, State> {
         board: newBoard,
       },
       () => {
-        if (value === 0) {
-          this.handleValidationofRed();
+        if (value !== 0) {
+          if (this.handleValidationofCompletion()) {
+            this.handleChangeMessage("You Solved the Puzzle!");
+            this.setState({
+              originalBoard: this.state.board,
+              win: true,
+            });
+            if (document.activeElement !== document.body) {
+              (document.activeElement as HTMLElement)!.blur();
+            }
+          }
+          return;
         }
+        this.handleValidationofRed();
       }
     );
+  }
+
+  handleValidationofCompletion(): boolean {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (this.state.originalBoard[i][j] === 0) {
+          if (!isValid(this.state.board, i, j, this.state.board[i][j])) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   handleValidationofRed(): void {
@@ -146,11 +176,11 @@ export default class Home extends Component<Props, State> {
     };
     const currentlySelected = document.getElementsByClassName("selected");
     currentlySelected[0].className = "basic-button";
-    const myElement = document.getElementById("difficulty-buttons");
-    const firstChild = myElement!.children[
+    const diffButtons = document.getElementById("difficulty-buttons");
+    const chosenChild = diffButtons!.children[
       wordIndexDict[difficulty]
     ] as HTMLElement;
-    firstChild.className = "basic-button selected";
+    chosenChild.className = "basic-button selected";
     this.setState({
       difficulty: difficulty,
     });
@@ -164,9 +194,16 @@ export default class Home extends Component<Props, State> {
       board: Array(9)
         .fill(null)
         .map(() => new Array(9).fill(0)),
+      win: false,
     });
     this.handleChangeMessage("Board is now empty");
     this.resetRed();
+  }
+
+  handleDisplayHelp(): void {
+    this.setState({
+      displayHelp: !this.state.displayHelp,
+    });
   }
 
   render() {
@@ -194,18 +231,20 @@ export default class Home extends Component<Props, State> {
               >
                 Hard
               </button>
-              
             </div>
             <div>
-            <button
+              <button
                 className="basic-button"
                 onClick={() => this.generateNewBoard()}
               >
                 Generate
               </button>
-              <button className="basic-button" onClick={() => this.handleBlank()}>
-              Blank
-            </button>
+              <button
+                className="basic-button"
+                onClick={() => this.handleBlank()}
+              >
+                Blank
+              </button>
             </div>
           </div>
         </div>
@@ -233,16 +272,26 @@ export default class Home extends Component<Props, State> {
           })}
         </div>
 
-            <div className="center-row-flex">
-            <button className="basic-button" onClick={() => this.handleSolve()}>
-              Solve
-            </button>
-            <button className="basic-button" onClick={() => this.handleReset()}>
-              Reset
-            </button>
-            </div>
-            
-        
+        <div className="center-row-flex">
+          <button className="basic-button" onClick={() => this.handleSolve()}>
+            Solve
+          </button>
+          <button className="basic-button" onClick={() => this.handleReset()}>
+            Reset
+          </button>
+          <button
+            className="basic-button"
+            onClick={() => this.handleDisplayHelp()}
+          >
+            <AiOutlineQuestion />
+          </button>
+        </div>
+        {this.state.displayHelp && (
+          <Help handleCloseModal={() => this.handleDisplayHelp()}></Help>
+        )}
+        {this.state.win && (
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+        )}
         <Snackbar
           message={this.state.message}
           clearMessage={this.handleClearMessage}

@@ -30,6 +30,7 @@ Use the following link: https://shenalexw.github.io/solvuko/
 - [Async Await in TypeScript](https://blog.logrocket.com/async-await-in-typescript/)
 - [Python Project Sudoku Solver](https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/)
 - [How to generate a sudoku puzzle in javaScript](https://www.geeksforgeeks.org/program-sudoku-generator/)
+- [React Confetti](https://www.npmjs.com/package/react-confetti)
 
 ## Learning Points
 
