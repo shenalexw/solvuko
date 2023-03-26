@@ -53,11 +53,13 @@ body {
   border: none;
   outline: none;
   caret-color: transparent;
+  cursor: pointer;
 }
 
 .grid-block:focus {
   background-color: #b5bad9a8;
   border: none;
+  cursor: text;
 }
 
 .grid-block:nth-child(3n) {
@@ -104,6 +106,7 @@ body {
   font-weight: 900;
   font-size: 20px;
   color: black;
+  cursor: default;
 }
 
 .bold:focus {
