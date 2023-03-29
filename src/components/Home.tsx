@@ -2,6 +2,7 @@ import { Component } from "react";
 import Help from "./Help";
 import Snackbar from "./Snackbar";
 import Cell from "./Cell";
+import Inputs from "./Inputs";
 import { isValid, solve, newBoard } from "../util";
 import Confetti from "react-confetti";
 import { AiOutlineQuestion } from "react-icons/ai";
@@ -16,6 +17,7 @@ type State = {
   win: boolean;
   displayHelp: boolean;
   isMobile: boolean;
+  prevElementFocus: HTMLElement | null;
 };
 
 export default class Home extends Component<Props, State> {
@@ -29,6 +31,7 @@ export default class Home extends Component<Props, State> {
       win: false,
       displayHelp: false,
       isMobile: false,
+      prevElementFocus: null
     };
 
     this.handleClearMessage = this.handleClearMessage.bind(this);
@@ -40,6 +43,7 @@ export default class Home extends Component<Props, State> {
     this.handleBlank = this.handleBlank.bind(this);
     this.handleDisplayHelp = this.handleDisplayHelp.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleFocusChange = this.handleFocusChange.bind(this);
   }
 
   componentDidMount() {
@@ -52,10 +56,14 @@ export default class Home extends Component<Props, State> {
       board: brandNewBoard,
     });
     window.addEventListener("resize", this.handleResize);
+    this.handleResize()
+    this.setState({ prevElementFocus: document.activeElement as HTMLElement });
+    window.addEventListener('focusin', this.handleFocusChange);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('focusin', this.handleFocusChange);
   }
 
   resetRed(): void {
@@ -216,9 +224,13 @@ export default class Home extends Component<Props, State> {
     });
   }
 
-  handleResize() {
+  handleResize(): void {
     this.setState({ isMobile: window.innerWidth <= 480 ? true : false });
   }
+
+  handleFocusChange(): void {
+    this.setState({ prevElementFocus: document.activeElement as HTMLElement });
+  };
 
   render() {
     return (
@@ -287,12 +299,14 @@ export default class Home extends Component<Props, State> {
                         ? true
                         : false
                     }
+                    prevElementFocus={this.state.prevElementFocus}
                   />
                 ))}
               </div>
             );
           })}
         </div>
+        {this.state.isMobile ? <Inputs prevElementFocus={this.state.prevElementFocus}/> : <></>}
         <div className="center-row-flex">
           <button className="basic-button" onClick={() => this.handleSolve()}>
             Solve

@@ -6,6 +6,7 @@ type Props = {
   rowIndex: number;
   colIndex: number;
   handleCellUpdate: (value: number, rowIndex: number, colIndex: number) => void;
+  prevElementFocus: HTMLElement | null
 };
 
 type State = {
@@ -33,6 +34,8 @@ export default class Cell extends React.Component<Props, State> {
     if (!this.state.focused) {
       return;
     }
+
+    console.log(event.key)
 
     if (
       event.key === "ArrowUp" ||

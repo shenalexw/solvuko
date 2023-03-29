@@ -168,5 +168,9 @@ body {
   .space-between-flex {
     width: 350px;
   }
+
+  .center-row-flex {
+    padding: 5px;
+  }
   
 }
