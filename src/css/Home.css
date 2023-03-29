@@ -120,3 +120,53 @@ body {
 .selected {
   outline: 2px gray solid;
 }
+
+.drop-down{
+  border:none;
+  padding: 10px 20px;
+  border-radius:10px;
+  background-color: #d9d0b5;
+}
+
+.drop-down:focus{
+  outline:none;
+}
+
+
+@media screen and (max-width: 480px) {
+  .grid-block{
+    height: 35px;
+    width: 35px;
+  }
+
+  .grid-row {
+    padding: 0px 5px 0px 5px;
+  }
+
+  .grid-block:nth-child(3n) {
+    margin-right: 5px;
+  }
+
+  .grid-row:first-child {
+    padding: 5px 5px 0px 5px;
+    border-radius: 5px 5px 0px 0px;
+  }
+  
+  .grid-row:nth-child(3n) {
+    padding: 0px 5px 5px 5px;
+  }
+  
+  .grid-row:nth-child(8) {
+    padding: 0px 5px 0px 5px;
+  }
+  
+  .grid-row:last-child {
+    padding: 0px 5px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
+  }
+
+  .space-between-flex {
+    width: 350px;
+  }
+  
+}

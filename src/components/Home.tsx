@@ -15,6 +15,7 @@ type State = {
   difficulty: string;
   win: boolean;
   displayHelp: boolean;
+  isMobile: boolean;
 };
 
 export default class Home extends Component<Props, State> {
@@ -27,6 +28,7 @@ export default class Home extends Component<Props, State> {
       difficulty: "Easy",
       win: false,
       displayHelp: false,
+      isMobile: false,
     };
 
     this.handleClearMessage = this.handleClearMessage.bind(this);
@@ -37,6 +39,7 @@ export default class Home extends Component<Props, State> {
     this.handleValidationofRed = this.handleValidationofRed.bind(this);
     this.handleBlank = this.handleBlank.bind(this);
     this.handleDisplayHelp = this.handleDisplayHelp.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +51,11 @@ export default class Home extends Component<Props, State> {
       originalBoard: brandNewBoard,
       board: brandNewBoard,
     });
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   resetRed(): void {
@@ -174,13 +182,15 @@ export default class Home extends Component<Props, State> {
       Medium: 1,
       Hard: 2,
     };
-    const currentlySelected = document.getElementsByClassName("selected");
-    currentlySelected[0].className = "basic-button";
-    const diffButtons = document.getElementById("difficulty-buttons");
-    const chosenChild = diffButtons!.children[
-      wordIndexDict[difficulty]
-    ] as HTMLElement;
-    chosenChild.className = "basic-button selected";
+    if (!this.state.isMobile){
+      const currentlySelected = document.getElementsByClassName("selected");
+      currentlySelected[0].className = "basic-button";
+      const diffButtons = document.getElementById("difficulty-buttons");
+      const chosenChild = diffButtons!.children[
+        wordIndexDict[difficulty]
+      ] as HTMLElement;
+      chosenChild.className = "basic-button selected";
+    }
     this.setState({
       difficulty: difficulty,
     });
@@ -206,32 +216,44 @@ export default class Home extends Component<Props, State> {
     });
   }
 
+  handleResize() {
+    this.setState({ isMobile: window.innerWidth <= 480 ? true : false });
+  }
+
   render() {
     return (
       <>
         <div className="title">Sulvoku</div>
         <div className="center-row-flex">
           <div className="space-between-flex">
-            <div id="difficulty-buttons">
-              <button
-                className="basic-button"
-                onClick={() => this.handleDifficulty("Easy")}
-              >
-                Easy
-              </button>
-              <button
-                className="basic-button"
-                onClick={() => this.handleDifficulty("Medium")}
-              >
-                Medium
-              </button>
-              <button
-                className="basic-button"
-                onClick={() => this.handleDifficulty("Hard")}
-              >
-                Hard
-              </button>
-            </div>
+            {!this.state.isMobile ? (
+              <div id="difficulty-buttons">
+                <button
+                  className="basic-button"
+                  onClick={() => this.handleDifficulty("Easy")}
+                >
+                  Easy
+                </button>
+                <button
+                  className="basic-button"
+                  onClick={() => this.handleDifficulty("Medium")}
+                >
+                  Medium
+                </button>
+                <button
+                  className="basic-button"
+                  onClick={() => this.handleDifficulty("Hard")}
+                >
+                  Hard
+                </button>
+              </div>
+            ) : (
+              <select onChange={(event) => this.handleDifficulty(event.target.value)} className="drop-down">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            )}
             <div>
               <button
                 className="basic-button"
@@ -271,7 +293,6 @@ export default class Home extends Component<Props, State> {
             );
           })}
         </div>
-
         <div className="center-row-flex">
           <button className="basic-button" onClick={() => this.handleSolve()}>
             Solve

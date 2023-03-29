@@ -13,7 +13,7 @@ export function isValid(
   let newBoard = board;
   if (board[row][col] !== 0) {
     newBoard = JSON.parse(JSON.stringify(board));
-    newBoard[row][col] = 0
+    newBoard[row][col] = 0;
   }
   for (let i = 0; i < 9; i++) {
     const m = 3 * Math.floor(row / 3) + Math.floor(i / 3);
@@ -61,16 +61,20 @@ export function findZero(board: number[][]): { row: number; col: number } {
 
 export function newBoard(difficulty: string): number[][] {
   let grid = new Array(9).fill(null).map(() => new Array(9).fill(0));
-  let gridIndex = 8
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  while (numbers.length > 0 || gridIndex > 0) {
-    const index = Math.floor(Math.random() * numbers.length);
-    const num = numbers[index];
-    if (isValid(grid, gridIndex, gridIndex, num)) {
-      grid[gridIndex][gridIndex] = num;
-      gridIndex -= 1
+  for (let k = 0; k < 9; k += 3) {
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    while (numbers.length > 0) {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          const index = Math.floor(Math.random() * numbers.length);
+          const num = numbers[index];
+          if (isValid(grid, k + i, k + j, num)) {
+            grid[k + i][k + j] = num;
+          }
+          numbers.splice(index, 1);
+        }
+      }
     }
-    numbers.splice(index, 1);
   }
   solve(grid);
   randomFillZero(grid, difficultyDict[difficulty]);

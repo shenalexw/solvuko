@@ -23,3 +23,11 @@
     opacity: 1;
   }
 }
+
+@media screen and (max-width: 480px) {
+  .snackbar {
+    bottom: auto;
+    top: 10px;
+    min-width: 85%;
+  }
+}
