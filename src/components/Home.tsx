@@ -47,9 +47,6 @@ export default class Home extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const myElement = document.getElementById("difficulty-buttons");
-    const firstChild = myElement!.children[0];
-    firstChild.className = "basic-button selected";
     const brandNewBoard: number[][] = newBoard(this.state.difficulty);
     this.setState({
       originalBoard: brandNewBoard,
@@ -185,20 +182,6 @@ export default class Home extends Component<Props, State> {
   }
 
   handleDifficulty(difficulty: string): void {
-    const wordIndexDict: { [char: string]: number } = {
-      Easy: 0,
-      Medium: 1,
-      Hard: 2,
-    };
-    if (!this.state.isMobile){
-      const currentlySelected = document.getElementsByClassName("selected");
-      currentlySelected[0].className = "basic-button";
-      const diffButtons = document.getElementById("difficulty-buttons");
-      const chosenChild = diffButtons!.children[
-        wordIndexDict[difficulty]
-      ] as HTMLElement;
-      chosenChild.className = "basic-button selected";
-    }
     this.setState({
       difficulty: difficulty,
     });
@@ -238,34 +221,11 @@ export default class Home extends Component<Props, State> {
         <div className="title">Sulvoku</div>
         <div className="center-row-flex">
           <div className="space-between-flex">
-            {!this.state.isMobile ? (
-              <div id="difficulty-buttons">
-                <button
-                  className="basic-button"
-                  onClick={() => this.handleDifficulty("Easy")}
-                >
-                  Easy
-                </button>
-                <button
-                  className="basic-button"
-                  onClick={() => this.handleDifficulty("Medium")}
-                >
-                  Medium
-                </button>
-                <button
-                  className="basic-button"
-                  onClick={() => this.handleDifficulty("Hard")}
-                >
-                  Hard
-                </button>
-              </div>
-            ) : (
               <select onChange={(event) => this.handleDifficulty(event.target.value)} className="drop-down">
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
               </select>
-            )}
             <div>
               <button
                 className="basic-button"
@@ -300,6 +260,7 @@ export default class Home extends Component<Props, State> {
                         : false
                     }
                     prevElementFocus={this.state.prevElementFocus}
+                    isMobile={this.state.isMobile}
                   />
                 ))}
               </div>

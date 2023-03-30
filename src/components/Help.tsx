@@ -39,12 +39,12 @@ export default class Help extends Component<Props, State> {
         <div className="dark"></div>
         <div className="modal">
           <button
-            className="basic-button"
+            className="basic-button exit"
             onClick={this.props.handleCloseModal}
           >
             <AiOutlineClose />
           </button>
-          <div className="title">{helpJson["titles"][this.state.index]}</div>
+          <div className="title-modal">{helpJson["titles"][this.state.index]}</div>
           <div className="space-between-col">
             <div className="list">
               <ul>
@@ -55,7 +55,7 @@ export default class Help extends Component<Props, State> {
                 )}
               </ul>
             </div>
-            <div className="center-row-flex">
+            <div className="center-row-flex cycle">
               {this.state.index !== 0 && (
                 <button
                   className="basic-button"

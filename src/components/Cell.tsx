@@ -7,6 +7,7 @@ type Props = {
   colIndex: number;
   handleCellUpdate: (value: number, rowIndex: number, colIndex: number) => void;
   prevElementFocus: HTMLElement | null
+  isMobile: boolean;
 };
 
 type State = {
@@ -31,11 +32,9 @@ export default class Cell extends React.Component<Props, State> {
   }
 
   handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-    if (!this.state.focused) {
+    if (!this.state.focused && !this.props.isMobile) {
       return;
     }
-
-    console.log(event.key)
 
     if (
       event.key === "ArrowUp" ||

@@ -1,3 +1,15 @@
+.title-modal{
+  font-size: 20px;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.exit{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 .dark {
   top: 0;
   width: 100%;
@@ -24,9 +36,21 @@
   text-align: left;
 }
 
+.cycle{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .space-between-col {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 80%;
+}
+
+@media screen and (max-width: 480px) {
+  .modal{
+    width: 80%;
+  }
 }

@@ -117,11 +117,7 @@ body {
   outline: 2px red solid;
 }
 
-.selected {
-  outline: 2px gray solid;
-}
-
-.drop-down{
+/* .drop-down{
   border:none;
   padding: 10px 20px;
   border-radius:10px;
@@ -130,8 +126,17 @@ body {
 
 .drop-down:focus{
   outline:none;
+} */
+
+.drop-down{
+  border:none;
+  padding: 10px 20px;
+  background-color: #d9d0b5;
 }
 
+.drop-down:focus {
+  outline: none;
+}
 
 @media screen and (max-width: 480px) {
   .grid-block{
