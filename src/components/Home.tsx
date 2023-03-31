@@ -31,7 +31,7 @@ export default class Home extends Component<Props, State> {
       win: false,
       displayHelp: false,
       isMobile: false,
-      prevElementFocus: null
+      prevElementFocus: null,
     };
 
     this.handleClearMessage = this.handleClearMessage.bind(this);
@@ -53,14 +53,14 @@ export default class Home extends Component<Props, State> {
       board: brandNewBoard,
     });
     window.addEventListener("resize", this.handleResize);
-    this.handleResize()
+    this.handleResize();
     this.setState({ prevElementFocus: document.activeElement as HTMLElement });
-    window.addEventListener('focusin', this.handleFocusChange);
+    window.addEventListener("focusin", this.handleFocusChange);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
-    window.removeEventListener('focusin', this.handleFocusChange);
+    window.removeEventListener("focusin", this.handleFocusChange);
   }
 
   resetRed(): void {
@@ -213,7 +213,7 @@ export default class Home extends Component<Props, State> {
 
   handleFocusChange(): void {
     this.setState({ prevElementFocus: document.activeElement as HTMLElement });
-  };
+  }
 
   render() {
     return (
@@ -221,11 +221,14 @@ export default class Home extends Component<Props, State> {
         <div className="title">Sulvoku</div>
         <div className="center-row-flex">
           <div className="space-between-flex">
-              <select onChange={(event) => this.handleDifficulty(event.target.value)} className="drop-down">
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-              </select>
+            <select
+              onChange={(event) => this.handleDifficulty(event.target.value)}
+              className="drop-down"
+            >
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
             <div>
               <button
                 className="basic-button"
@@ -238,6 +241,12 @@ export default class Home extends Component<Props, State> {
                 onClick={() => this.handleBlank()}
               >
                 Blank
+              </button>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleDisplayHelp()}
+              >
+                <AiOutlineQuestion />
               </button>
             </div>
           </div>
@@ -267,19 +276,17 @@ export default class Home extends Component<Props, State> {
             );
           })}
         </div>
-        {this.state.isMobile ? <Inputs prevElementFocus={this.state.prevElementFocus}/> : <></>}
+        {this.state.isMobile ? (
+          <Inputs prevElementFocus={this.state.prevElementFocus} />
+        ) : (
+          <></>
+        )}
         <div className="center-row-flex">
           <button className="basic-button" onClick={() => this.handleSolve()}>
             Solve
           </button>
           <button className="basic-button" onClick={() => this.handleReset()}>
             Reset
-          </button>
-          <button
-            className="basic-button"
-            onClick={() => this.handleDisplayHelp()}
-          >
-            <AiOutlineQuestion />
           </button>
         </div>
         {this.state.displayHelp && (

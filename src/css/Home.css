@@ -111,22 +111,12 @@ body {
 
 .bold:focus {
   background-color: lightcoral;
+  cursor: default;
 }
 
 .red {
   outline: 2px red solid;
 }
-
-/* .drop-down{
-  border:none;
-  padding: 10px 20px;
-  border-radius:10px;
-  background-color: #d9d0b5;
-}
-
-.drop-down:focus{
-  outline:none;
-} */
 
 .drop-down{
   border:none;
@@ -136,6 +126,10 @@ body {
 
 .drop-down:focus {
   outline: none;
+}
+
+.question {
+  padding: 10px;
 }
 
 @media screen and (max-width: 480px) {

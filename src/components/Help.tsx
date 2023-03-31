@@ -50,7 +50,7 @@ export default class Help extends Component<Props, State> {
               <ul>
                 {helpJson["list"][helpJson["titles"][this.state.index]].map(
                   (line, index) => (
-                    <li key={index}>{line}</li>
+                    <li className="bullets" key={index}>{line}</li>
                   )
                 )}
               </ul>

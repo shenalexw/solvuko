@@ -49,8 +49,16 @@
   height: 80%;
 }
 
+.bullets{
+  margin-top: 15px;
+}
+
 @media screen and (max-width: 480px) {
   .modal{
     width: 80%;
+  }
+
+  .bullets{
+    margin-top: 0px;
   }
 }
