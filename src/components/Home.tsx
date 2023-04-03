@@ -3,6 +3,7 @@ import Help from "./Help";
 import Snackbar from "./Snackbar";
 import Cell from "./Cell";
 import Inputs from "./Inputs";
+import Dropdown from "./Dropdown";
 import { isValid, solve, newBoard } from "../util";
 import Confetti from "react-confetti";
 import { AiOutlineQuestion } from "react-icons/ai";
@@ -184,6 +185,8 @@ export default class Home extends Component<Props, State> {
   handleDifficulty(difficulty: string): void {
     this.setState({
       difficulty: difficulty,
+    }, () => {
+      this.generateNewBoard();
     });
   }
 
@@ -196,6 +199,7 @@ export default class Home extends Component<Props, State> {
         .fill(null)
         .map(() => new Array(9).fill(0)),
       win: false,
+      difficulty: "Blank"
     });
     this.handleChangeMessage("Board is now empty");
     this.resetRed();
@@ -221,27 +225,12 @@ export default class Home extends Component<Props, State> {
         <div className="title">Sulvoku</div>
         <div className="center-row-flex">
           <div className="space-between-flex">
-            <select
-              onChange={(event) => this.handleDifficulty(event.target.value)}
-              className="drop-down"
-            >
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
+            <Dropdown
+             changeDifficulty={(difficulty: string) => this.handleDifficulty(difficulty)}
+              generateBlank={this.handleBlank}
+              currentDifficulty={this.state.difficulty}
+            />
             <div>
-              <button
-                className="basic-button"
-                onClick={() => this.generateNewBoard()}
-              >
-                Generate
-              </button>
-              <button
-                className="basic-button"
-                onClick={() => this.handleBlank()}
-              >
-                Blank
-              </button>
               <button
                 className="basic-button question"
                 onClick={() => this.handleDisplayHelp()}

@@ -18,7 +18,6 @@ const helpJson: HelpJson = {
     Generate: [
       "The default board is generated at an easy difficulty level.",
       "To adjust the difficulty, select an option from the menu in the top left corner.",
-      "To create a new puzzle, click on the 'Generate' button.",
       "Alternatively, if you prefer to start with a completely blank grid, click on the 'Blank' button to clear the board.",
     ],
     Play: [

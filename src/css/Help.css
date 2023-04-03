@@ -1,10 +1,10 @@
-.title-modal{
+.title-modal {
   font-size: 20px;
   font-weight: bolder;
   text-align: center;
 }
 
-.exit{
+.exit {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -26,6 +26,7 @@
   padding: 40px;
   text-align: center;
   height: 500px;
+  max-width: 500px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -36,7 +37,7 @@
   text-align: left;
 }
 
-.cycle{
+.cycle {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -49,16 +50,16 @@
   height: 80%;
 }
 
-.bullets{
+.bullets {
   margin-top: 15px;
 }
 
 @media screen and (max-width: 480px) {
-  .modal{
+  .modal {
     width: 80%;
   }
 
-  .bullets{
+  .bullets {
     margin-top: 0px;
   }
 }
