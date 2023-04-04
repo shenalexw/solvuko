@@ -41,6 +41,9 @@ body {
 }
 
 .grid-block {
+  font-weight: 900;
+  font-size: 20px;
+  color: #4974a5;
   height: 50px;
   width: 50px;
   margin: 2px;
@@ -57,7 +60,7 @@ body {
 }
 
 .grid-block:focus {
-  background-color: #b5bad9a8;
+  background-color: #ccc6bc;
   border: none;
   cursor: text;
 }
@@ -110,16 +113,20 @@ body {
 }
 
 .bold:focus {
-  background-color: lightcoral;
   cursor: default;
 }
 
 .red {
-  outline: 2px red solid;
+  outline: 1.5px red solid;
+  color: red;
 }
 
 .same {
-  background-color: #F7BFBF;
+  background-color: #d3d3dc;
+}
+
+.same-wrong {
+  background-color: #f7bfbf;
 }
 
 .question {

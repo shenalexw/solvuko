@@ -6,7 +6,7 @@ type Props = {
   rowIndex: number;
   colIndex: number;
   handleCellUpdate: (value: number, rowIndex: number, colIndex: number) => void;
-  checkExistingNumbers: (number: number) => void;
+  checkExistingNumbers: (number: number, incorrect: boolean) => void;
   uncheckExistingNumbers: () => void;
   prevElementFocus: HTMLElement | null
   isMobile: boolean;
@@ -27,7 +27,8 @@ export default class Cell extends React.Component<Props, State> {
 
   handleFocus(): void {
     this.setState({ focused: true });
-    this.props.checkExistingNumbers(this.props.number);
+    const cell = document.getElementById(`${this.props.rowIndex}:${this.props.colIndex}`);
+    this.props.checkExistingNumbers(this.props.number, cell!.classList.contains("red"));
   }
 
   handleBlur(): void {

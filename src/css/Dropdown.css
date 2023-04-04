@@ -24,6 +24,10 @@
   justify-content: space-between;
 }
 
+.drop-down-current:hover {
+  background-color: #b5bad9a8;
+}
+
 .drop-down-button {
   cursor: pointer;
   min-width: 170px;

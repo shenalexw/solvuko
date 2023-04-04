@@ -112,17 +112,17 @@ export default class Home extends Component<Props, State> {
     this.handleChangeMessage("Board has been reset");
   }
 
-  checkExistingNumbers(number: number): void{
+  checkExistingNumbers(number: number, incorrect: boolean): void{
     if(number !== 0){
       const gridBlocks = document.querySelectorAll('.grid-block:not(:empty)');
       const sameNumberedGridBlocks = Array.from(gridBlocks).filter((block) => block.innerHTML === String(number))
-      sameNumberedGridBlocks.forEach((block) => block.classList.add("same"))
+      sameNumberedGridBlocks.forEach((block) => block.classList.add(incorrect ? "same-wrong" : "same"))
     }
   }
 
   uncheckExistingNumbers(): void{
-    const gridBlocks = document.querySelectorAll('.same');
-    gridBlocks.forEach((block) => block.classList.remove("same"))
+    const gridBlocks = document.querySelectorAll('.same, .same-wrong');
+    gridBlocks.forEach((block) => block.classList.remove("same", "same-wrong"))
   }
 
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void {
@@ -141,9 +141,10 @@ export default class Home extends Component<Props, State> {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
       cell!.className = "grid-block red";
-      this.checkExistingNumbers(value)
+      this.checkExistingNumbers(value, true)
     } else {
       cell!.className = "grid-block";
+      this.checkExistingNumbers(value, false)
     }
     
 
@@ -279,7 +280,7 @@ export default class Home extends Component<Props, State> {
                     }
                     prevElementFocus={this.state.prevElementFocus}
                     isMobile={this.state.isMobile}
-                    checkExistingNumbers={(number: number) => this.checkExistingNumbers(number)}
+                    checkExistingNumbers={(number: number, incorrect: boolean) => this.checkExistingNumbers(number, incorrect)}
                     uncheckExistingNumbers={() => this.uncheckExistingNumbers()}
                   />
                 ))}
