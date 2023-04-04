@@ -118,6 +118,10 @@ body {
   outline: 2px red solid;
 }
 
+.same {
+  background-color: #F7BFBF;
+}
+
 .question {
   padding: 10px;
 }

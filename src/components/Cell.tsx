@@ -6,6 +6,8 @@ type Props = {
   rowIndex: number;
   colIndex: number;
   handleCellUpdate: (value: number, rowIndex: number, colIndex: number) => void;
+  checkExistingNumbers: (number: number) => void;
+  uncheckExistingNumbers: () => void;
   prevElementFocus: HTMLElement | null
   isMobile: boolean;
 };
@@ -25,10 +27,12 @@ export default class Cell extends React.Component<Props, State> {
 
   handleFocus(): void {
     this.setState({ focused: true });
+    this.props.checkExistingNumbers(this.props.number);
   }
 
   handleBlur(): void {
     this.setState({ focused: false });
+    this.props.uncheckExistingNumbers();
   }
 
   handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
@@ -92,6 +96,7 @@ export default class Cell extends React.Component<Props, State> {
         this.props.rowIndex,
         this.props.colIndex
       );
+      
     } else {
       event.preventDefault();
     }

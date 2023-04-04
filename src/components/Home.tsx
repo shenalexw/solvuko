@@ -112,6 +112,19 @@ export default class Home extends Component<Props, State> {
     this.handleChangeMessage("Board has been reset");
   }
 
+  checkExistingNumbers(number: number): void{
+    if(number !== 0){
+      const gridBlocks = document.querySelectorAll('.grid-block:not(:empty)');
+      const sameNumberedGridBlocks = Array.from(gridBlocks).filter((block) => block.innerHTML === String(number))
+      sameNumberedGridBlocks.forEach((block) => block.classList.add("same"))
+    }
+  }
+
+  uncheckExistingNumbers(): void{
+    const gridBlocks = document.querySelectorAll('.same');
+    gridBlocks.forEach((block) => block.classList.remove("same"))
+  }
+
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void {
     if (value === this.state.board[rowIndex][colIndex] && value !== 0) {
       return;
@@ -119,13 +132,20 @@ export default class Home extends Component<Props, State> {
     const cell = document.getElementById(
       String(rowIndex) + ":" + String(colIndex)
     );
+
+    if(cell!.innerHTML !== String(value)){
+      this.uncheckExistingNumbers()
+    }
+
     if (value === 0) {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
       cell!.className = "grid-block red";
+      this.checkExistingNumbers(value)
     } else {
       cell!.className = "grid-block";
     }
+    
 
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     newBoard[rowIndex][colIndex] = value;
@@ -259,6 +279,8 @@ export default class Home extends Component<Props, State> {
                     }
                     prevElementFocus={this.state.prevElementFocus}
                     isMobile={this.state.isMobile}
+                    checkExistingNumbers={(number: number) => this.checkExistingNumbers(number)}
+                    uncheckExistingNumbers={() => this.uncheckExistingNumbers()}
                   />
                 ))}
               </div>
