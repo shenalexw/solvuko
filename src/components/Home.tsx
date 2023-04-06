@@ -6,7 +6,7 @@ import Inputs from "./Inputs";
 import Dropdown from "./Dropdown";
 import { isValid, solve, newBoard } from "../util";
 import Confetti from "react-confetti";
-import { AiOutlineQuestion } from "react-icons/ai";
+import { AiOutlineQuestion, AiOutlineUndo, AiOutlineCheck} from "react-icons/ai";
 import "../css/Home.css";
 type Props = {};
 
@@ -112,17 +112,21 @@ export default class Home extends Component<Props, State> {
     this.handleChangeMessage("Board has been reset");
   }
 
-  checkExistingNumbers(number: number, incorrect: boolean): void{
-    if(number !== 0){
-      const gridBlocks = document.querySelectorAll('.grid-block:not(:empty)');
-      const sameNumberedGridBlocks = Array.from(gridBlocks).filter((block) => block.innerHTML === String(number))
-      sameNumberedGridBlocks.forEach((block) => block.classList.add(incorrect ? "same-wrong" : "same"))
+  checkExistingNumbers(number: number, incorrect: boolean): void {
+    if (number !== 0) {
+      const gridBlocks = document.querySelectorAll(".grid-block:not(:empty)");
+      const sameNumberedGridBlocks = Array.from(gridBlocks).filter(
+        (block) => block.innerHTML === String(number)
+      );
+      sameNumberedGridBlocks.forEach((block) =>
+        block.classList.add(incorrect ? "same-wrong" : "same")
+      );
     }
   }
 
-  uncheckExistingNumbers(): void{
-    const gridBlocks = document.querySelectorAll('.same, .same-wrong');
-    gridBlocks.forEach((block) => block.classList.remove("same", "same-wrong"))
+  uncheckExistingNumbers(): void {
+    const gridBlocks = document.querySelectorAll(".same, .same-wrong");
+    gridBlocks.forEach((block) => block.classList.remove("same", "same-wrong"));
   }
 
   handleUpdateCell(value: number, rowIndex: number, colIndex: number): void {
@@ -133,20 +137,19 @@ export default class Home extends Component<Props, State> {
       String(rowIndex) + ":" + String(colIndex)
     );
 
-    if(cell!.innerHTML !== String(value)){
-      this.uncheckExistingNumbers()
+    if (cell!.innerHTML !== String(value)) {
+      this.uncheckExistingNumbers();
     }
 
     if (value === 0) {
       cell!.className = "grid-block";
     } else if (!isValid(this.state.board, rowIndex, colIndex, value)) {
       cell!.className = "grid-block red";
-      this.checkExistingNumbers(value, true)
+      this.checkExistingNumbers(value, true);
     } else {
       cell!.className = "grid-block";
-      this.checkExistingNumbers(value, false)
+      this.checkExistingNumbers(value, false);
     }
-    
 
     let newBoard = JSON.parse(JSON.stringify(this.state.board));
     newBoard[rowIndex][colIndex] = value;
@@ -204,11 +207,14 @@ export default class Home extends Component<Props, State> {
   }
 
   handleDifficulty(difficulty: string): void {
-    this.setState({
-      difficulty: difficulty,
-    }, () => {
-      this.generateNewBoard();
-    });
+    this.setState(
+      {
+        difficulty: difficulty,
+      },
+      () => {
+        this.generateNewBoard();
+      }
+    );
   }
 
   handleBlank(): void {
@@ -220,7 +226,7 @@ export default class Home extends Component<Props, State> {
         .fill(null)
         .map(() => new Array(9).fill(0)),
       win: false,
-      difficulty: "Blank"
+      difficulty: "Blank",
     });
     this.handleChangeMessage("Board is now empty");
     this.resetRed();
@@ -247,11 +253,25 @@ export default class Home extends Component<Props, State> {
         <div className="center-row-flex">
           <div className="space-between-flex">
             <Dropdown
-             changeDifficulty={(difficulty: string) => this.handleDifficulty(difficulty)}
+              changeDifficulty={(difficulty: string) =>
+                this.handleDifficulty(difficulty)
+              }
               generateBlank={this.handleBlank}
               currentDifficulty={this.state.difficulty}
             />
             <div>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleSolve()}
+              >
+                <AiOutlineCheck/>
+              </button>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleReset()}
+              >
+                <AiOutlineUndo/>
+              </button>
               <button
                 className="basic-button question"
                 onClick={() => this.handleDisplayHelp()}
@@ -280,7 +300,10 @@ export default class Home extends Component<Props, State> {
                     }
                     prevElementFocus={this.state.prevElementFocus}
                     isMobile={this.state.isMobile}
-                    checkExistingNumbers={(number: number, incorrect: boolean) => this.checkExistingNumbers(number, incorrect)}
+                    checkExistingNumbers={(
+                      number: number,
+                      incorrect: boolean
+                    ) => this.checkExistingNumbers(number, incorrect)}
                     uncheckExistingNumbers={() => this.uncheckExistingNumbers()}
                   />
                 ))}
@@ -293,14 +316,6 @@ export default class Home extends Component<Props, State> {
         ) : (
           <></>
         )}
-        <div className="center-row-flex">
-          <button className="basic-button" onClick={() => this.handleSolve()}>
-            Solve
-          </button>
-          <button className="basic-button" onClick={() => this.handleReset()}>
-            Reset
-          </button>
-        </div>
         {this.state.displayHelp && (
           <Help handleCloseModal={() => this.handleDisplayHelp()}></Help>
         )}
