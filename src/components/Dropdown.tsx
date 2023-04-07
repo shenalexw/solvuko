@@ -46,7 +46,7 @@ export default class Dropdown extends Component<Props, State> {
           <button className="drop-down-button" data-value="Easy" onClick={(event) => this.handleChoiceClick(event)}>Easy</button>
           <button className="drop-down-button" data-value="Medium" onClick={(event) => this.handleChoiceClick(event)}>Medium</button>
           <button className="drop-down-button" data-value="Hard" onClick={(event) => this.handleChoiceClick(event)}>Hard</button>
-          <button className="drop-down-button bottom" data-value="blank" onClick={(event) => this.handleChoiceClick(event)}>Blank</button>
+          <button className="drop-down-button" data-value="blank" onClick={(event) => this.handleChoiceClick(event)}>Blank</button>
         </div> : null}
       </div>
     );

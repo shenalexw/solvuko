@@ -40,12 +40,13 @@
 
 .drop-down-button {
   cursor: pointer;
-  min-width: 170px;
+  width: 170px;
+  height: 30px;
   border: none;
-  padding: 10px 15px;
   background-color: #d9d0b5;
   font-family: "Comfortaa";
   text-align: left;
+  color: black;
 }
 
 .drop-down-button:last-child {
