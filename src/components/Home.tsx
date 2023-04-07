@@ -6,7 +6,11 @@ import Inputs from "./Inputs";
 import Dropdown from "./Dropdown";
 import { isValid, solve, newBoard } from "../util";
 import Confetti from "react-confetti";
-import { AiOutlineQuestion, AiOutlineUndo, AiOutlineCheck} from "react-icons/ai";
+import {
+  AiOutlineQuestion,
+  AiOutlineUndo,
+  AiOutlineCheck,
+} from "react-icons/ai";
 import "../css/Home.css";
 type Props = {};
 
@@ -260,18 +264,22 @@ export default class Home extends Component<Props, State> {
               currentDifficulty={this.state.difficulty}
             />
             <div>
-              <button
-                className="basic-button question"
-                onClick={() => this.handleSolve()}
-              >
-                <AiOutlineCheck/>
-              </button>
-              <button
-                className="basic-button question"
-                onClick={() => this.handleReset()}
-              >
-                <AiOutlineUndo/>
-              </button>
+              {!this.state.isMobile ? (
+                <>
+                  <button
+                    className="basic-button question"
+                    onClick={() => this.handleSolve()}
+                  >
+                    <AiOutlineCheck /> Solve
+                  </button>
+                  <button
+                    className="basic-button question"
+                    onClick={() => this.handleReset()}
+                  >
+                    <AiOutlineUndo /> Reset
+                  </button>{" "}
+                </>
+              ) : null}
               <button
                 className="basic-button question"
                 onClick={() => this.handleDisplayHelp()}
@@ -311,6 +319,22 @@ export default class Home extends Component<Props, State> {
             );
           })}
         </div>
+        {this.state.isMobile ? (
+          <div className="center-row-flex">
+            <button
+              className="basic-button question"
+              onClick={() => this.handleSolve()}
+            >
+              <AiOutlineCheck /> Solve
+            </button>
+            <button
+              className="basic-button question"
+              onClick={() => this.handleReset()}
+            >
+              <AiOutlineUndo /> Reset
+            </button>{" "}
+          </div>
+        ) : null}
         {this.state.isMobile ? (
           <Inputs prevElementFocus={this.state.prevElementFocus} />
         ) : (

@@ -40,7 +40,7 @@ export default class Dropdown extends Component<Props, State> {
       <div className="drop-down">
         <div className={`drop-down-current ${!this.state.displayDrop ? "bottom-fill" : "bottom-round"}`} onClick={this.handleDropDownClick}>
             <div>{this.props.currentDifficulty}</div>
-            <div>{this.state.displayDrop ? <AiOutlineDown/> : <AiOutlineUp/>}</div>
+            <div>{this.state.displayDrop ? <AiOutlineUp/> : <AiOutlineDown/>}</div>
         </div>
         {this.state.displayDrop ? <div className="drop-down-button-col">
           <button className="drop-down-button" data-value="Easy" onClick={(event) => this.handleChoiceClick(event)}>Easy</button>

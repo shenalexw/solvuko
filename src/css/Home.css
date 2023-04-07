@@ -124,7 +124,7 @@ body {
 }
 
 .red {
-  outline: 1.5px red solid;
+  outline: 2px red solid;
   color: red;
 }
 
@@ -173,7 +173,7 @@ body {
   }
 
   .space-between-flex {
-    width: 350px;
+    width: 375px;
   }
 
   .center-row-flex {
