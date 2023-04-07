@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/sulvoku/static/css/main.1504371a.css",
-    "main.js": "/sulvoku/static/js/main.defdc619.js",
+    "main.css": "/sulvoku/static/css/main.cc908eaf.css",
+    "main.js": "/sulvoku/static/js/main.f461f022.js",
     "index.html": "/sulvoku/index.html",
-    "main.1504371a.css.map": "/sulvoku/static/css/main.1504371a.css.map",
-    "main.defdc619.js.map": "/sulvoku/static/js/main.defdc619.js.map"
+    "main.cc908eaf.css.map": "/sulvoku/static/css/main.cc908eaf.css.map",
+    "main.f461f022.js.map": "/sulvoku/static/js/main.f461f022.js.map"
   },
   "entrypoints": [
-    "static/css/main.1504371a.css",
-    "static/js/main.defdc619.js"
+    "static/css/main.cc908eaf.css",
+    "static/js/main.f461f022.js"
   ]
 }
