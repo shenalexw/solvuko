@@ -3,80 +3,106 @@ import React from "react";
 type Props = {
   static: boolean;
   number: number;
+  notes: boolean[];
   rowIndex: number;
   colIndex: number;
   handleCellUpdate: (value: number, rowIndex: number, colIndex: number) => void;
+  handleUpdateNotes: (
+    indexUpdate: number,
+    rowIndex: number,
+    colIndex: number
+  ) => void;
   checkExistingNumbers: (number: number, incorrect: boolean) => void;
   uncheckExistingNumbers: () => void;
-  prevElementFocus: HTMLElement | null
+  prevElementFocus: HTMLElement | null;
   isMobile: boolean;
+  isNoteMode: boolean;
 };
 
-type State = {
-  focused: boolean;
-};
+type State = {};
 
 export default class Cell extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { focused: false };
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleNoteWriting = this.handleNoteWriting.bind(this);
   }
 
+  handleNoteWriting(keyPress: string): void {
+    if (keyPress === "0" || this.props.number !== 0) {
+      return;
+    }
+    const indexUpdate = Number(keyPress) - 1;
+    this.props.handleUpdateNotes(
+      indexUpdate,
+      this.props.rowIndex,
+      this.props.colIndex
+    );
+  }
   handleFocus(): void {
-    this.setState({ focused: true });
-    const cell = document.getElementById(`${this.props.rowIndex}:${this.props.colIndex}`);
-    this.props.checkExistingNumbers(this.props.number, cell!.classList.contains("red"));
+    const cell = document.getElementById(
+      `${this.props.rowIndex}:${this.props.colIndex}`
+    );
+    this.props.checkExistingNumbers(
+      this.props.number,
+      cell!.classList.contains("red")
+    );
   }
 
   handleBlur(): void {
-    this.setState({ focused: false });
     this.props.uncheckExistingNumbers();
   }
 
   handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-    if (!this.state.focused && !this.props.isMobile) {
-      return;
-    }
-
+    const keyPress = event.key.toLowerCase();
     if (
-      event.key === "ArrowUp" ||
-      event.key === "ArrowDown" ||
-      event.key === "ArrowLeft" ||
-      event.key === "ArrowRight"
+      keyPress === "arrowup" ||
+      keyPress === "arrowdown" ||
+      keyPress === "arrowleft" ||
+      keyPress === "arrowright" ||
+      keyPress === "w" ||
+      keyPress === "s" ||
+      keyPress === "a" ||
+      keyPress === "d"
     ) {
       let newRowIndex = this.props.rowIndex;
       let newColIndex = this.props.colIndex;
 
-      switch (event.key) {
-        case "ArrowUp":
+      switch (keyPress) {
+        case "arrowup":
+        case "w":
           newRowIndex -= 1;
           break;
-        case "ArrowDown":
+        case "arrowdown":
+        case "s":
           newRowIndex += 1;
           break;
-        case "ArrowRight":
+        case "arrowright":
+        case "d":
           newColIndex += 1;
           break;
-        case "ArrowLeft":
+        case "arrowleft":
+        case "a":
           newColIndex -= 1;
           break;
         default:
           return;
       }
 
-      if (
-        newRowIndex < 0 ||
-        newRowIndex > 8 ||
-        newColIndex < 0 ||
-        newColIndex > 8
-      ) {
+      if (newColIndex < 0 || newColIndex > 8) {
         return;
       }
 
-      const cell = document.getElementById(`${newRowIndex}:${newColIndex}`);
+      const cellId =
+        newRowIndex < 0
+          ? "drop-down-menu"
+          : newRowIndex > 8
+          ? "note-mode-toggle"
+          : `${newRowIndex}:${newColIndex}`;
+
+      const cell = document.getElementById(cellId);
       if (cell !== null) {
         cell!.focus();
         return;
@@ -85,19 +111,17 @@ export default class Cell extends React.Component<Props, State> {
     if (this.props.static) {
       return;
     }
-    if (event.key === "Backspace") {
+    if (keyPress === "backspace") {
       this.props.handleCellUpdate(0, this.props.rowIndex, this.props.colIndex);
-    } else if (event.key === "Tab") {
-      this.setState({
-        focused: false,
-      });
-    } else if (/^\d$/.test(event.key)) {
-      this.props.handleCellUpdate(
-        Number(event.key),
-        this.props.rowIndex,
-        this.props.colIndex
-      );
-      
+    } else if (keyPress === "tab") {
+    } else if (/^\d$/.test(keyPress)) {
+      this.props.isNoteMode
+        ? this.handleNoteWriting(keyPress)
+        : this.props.handleCellUpdate(
+            Number(keyPress),
+            this.props.rowIndex,
+            this.props.colIndex
+          );
     } else {
       event.preventDefault();
     }
@@ -113,7 +137,31 @@ export default class Cell extends React.Component<Props, State> {
         onKeyDown={this.handleKeyDown}
         className={this.props.static ? "grid-block bold" : "grid-block"}
       >
-        {this.props.number === 0 ? "" : this.props.number}
+        {this.props.number === 0 ? (
+          this.props.notes.some((bool) => bool === true) ? (
+            <div className="notes">
+              {this.props.notes.map((note, i) =>
+                note ? (
+                  <div
+                    key={`${this.props.rowIndex}:${this.props.colIndex}:${i}`}
+                    className="note-block"
+                  >
+                    {i + 1}
+                  </div>
+                ) : (
+                  <div
+                    key={`${this.props.rowIndex}:${this.props.colIndex}:${i}`}
+                    className="note-block"
+                  ></div>
+                )
+              )}
+            </div>
+          ) : (
+            ""
+          )
+        ) : (
+          this.props.number
+        )}
       </div>
     );
   }

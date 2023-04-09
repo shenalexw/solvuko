@@ -41,10 +41,11 @@
 .drop-down-button {
   cursor: pointer;
   width: 170px;
-  height: 30px;
+  height: 40px;
   border: none;
   background-color: #d9d0b5;
   font-family: "Comfortaa";
+  font-size: 16px;
   text-align: left;
   color: black;
 }

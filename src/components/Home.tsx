@@ -11,18 +11,24 @@ import {
   AiOutlineUndo,
   AiOutlineCheck,
 } from "react-icons/ai";
+import { RxKeyboard } from "react-icons/rx";
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
+import { TbKeyboardHide, TbKeyboardShow } from "react-icons/tb";
 import "../css/Home.css";
 type Props = {};
 
 type State = {
   originalBoard: number[][];
   board: number[][];
+  notes: boolean[][][];
   message: string;
   difficulty: string;
   win: boolean;
   displayHelp: boolean;
   isMobile: boolean;
   prevElementFocus: HTMLElement | null;
+  displayKeyboard: boolean;
+  isNoteMode: boolean;
 };
 
 export default class Home extends Component<Props, State> {
@@ -31,12 +37,17 @@ export default class Home extends Component<Props, State> {
     this.state = {
       originalBoard: [],
       board: [],
+      notes: Array.from({ length: 9 }, () =>
+        Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => false))
+      ),
       message: "",
       difficulty: "Easy",
       win: false,
       displayHelp: false,
       isMobile: false,
       prevElementFocus: null,
+      displayKeyboard: false,
+      isNoteMode: false,
     };
 
     this.handleClearMessage = this.handleClearMessage.bind(this);
@@ -49,6 +60,10 @@ export default class Home extends Component<Props, State> {
     this.handleDisplayHelp = this.handleDisplayHelp.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.handleFocusChange = this.handleFocusChange.bind(this);
+    this.handleDisplayKeyboard = this.handleDisplayKeyboard.bind(this);
+    this.handleNoteMode = this.handleNoteMode.bind(this);
+    this.handleUpdateNotes = this.handleUpdateNotes.bind(this);
+    this.handleClearNotes = this.handleClearNotes.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +113,7 @@ export default class Home extends Component<Props, State> {
       this.state.difficulty + " puzzle has been generated"
     );
     this.resetRed();
+    this.handleClearNotes();
   }
 
   handleChangeMessage(message: string): void {
@@ -113,6 +129,7 @@ export default class Home extends Component<Props, State> {
       board: this.state.originalBoard,
     });
     this.resetRed();
+    this.handleClearNotes();
     this.handleChangeMessage("Board has been reset");
   }
 
@@ -180,6 +197,27 @@ export default class Home extends Component<Props, State> {
     );
   }
 
+  handleUpdateNotes(
+    indexUpdate: number,
+    rowIndex: number,
+    colIndex: number
+  ): void {
+    const newArrayNotes = [...this.state.notes];
+    newArrayNotes[rowIndex][colIndex][indexUpdate] =
+      !newArrayNotes[rowIndex][colIndex][indexUpdate];
+    this.setState({
+      notes: newArrayNotes,
+    });
+  }
+
+  handleClearNotes(): void {
+    this.setState({
+      notes: Array.from({ length: 9 }, () =>
+        Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => false))
+      ),
+    });
+  }
+
   handleValidationofCompletion(): boolean {
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
@@ -234,6 +272,7 @@ export default class Home extends Component<Props, State> {
     });
     this.handleChangeMessage("Board is now empty");
     this.resetRed();
+    this.handleClearNotes();
   }
 
   handleDisplayHelp(): void {
@@ -242,8 +281,21 @@ export default class Home extends Component<Props, State> {
     });
   }
 
+  handleDisplayKeyboard(): void {
+    this.setState({
+      displayKeyboard: !this.state.displayKeyboard,
+    });
+  }
+
+  handleNoteMode(): void {
+    this.setState({
+      isNoteMode: !this.state.isNoteMode,
+    });
+  }
+
   handleResize(): void {
-    this.setState({ isMobile: window.innerWidth <= 480 ? true : false });
+    const isMobile = window.innerWidth <= 480 ? true : false;
+    this.setState({ isMobile: isMobile, displayKeyboard: isMobile });
   }
 
   handleFocusChange(): void {
@@ -254,8 +306,8 @@ export default class Home extends Component<Props, State> {
     return (
       <>
         <div className="title">Sulvoku</div>
-        <div className="center-row-flex">
-          <div className="space-between-flex">
+        <div className="center-row-flex header-row-options">
+          <div className="space-between-flex header-row-width">
             <Dropdown
               changeDifficulty={(difficulty: string) =>
                 this.handleDifficulty(difficulty)
@@ -264,82 +316,107 @@ export default class Home extends Component<Props, State> {
               currentDifficulty={this.state.difficulty}
             />
             <div>
-              {!this.state.isMobile ? (
-                <>
-                  <button
-                    className="basic-button question"
-                    onClick={() => this.handleSolve()}
-                  >
-                    <AiOutlineCheck /> Solve
-                  </button>
-                  <button
-                    className="basic-button question"
-                    onClick={() => this.handleReset()}
-                  >
-                    <AiOutlineUndo /> Reset
-                  </button>{" "}
-                </>
-              ) : null}
               <button
                 className="basic-button question"
                 onClick={() => this.handleDisplayHelp()}
               >
                 <AiOutlineQuestion />
               </button>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleDisplayKeyboard()}
+              >
+                {!this.state.isMobile ? (
+                  <>
+                    <RxKeyboard />
+                    {this.state.displayKeyboard ? (
+                      <MdKeyboardArrowLeft />
+                    ) : (
+                      <MdKeyboardArrowRight />
+                    )}
+                  </>
+                ) : this.state.displayKeyboard ? (
+                  <TbKeyboardShow />
+                ) : (
+                  <TbKeyboardHide />
+                )}
+              </button>
             </div>
           </div>
         </div>
-
-        <div className="grid">
-          {this.state.board.map((row, rowIndex) => {
-            return (
-              <div className="grid-row" key={rowIndex}>
-                {row.map((num, colIndex) => (
-                  <Cell
-                    key={colIndex}
-                    rowIndex={rowIndex}
-                    colIndex={colIndex}
-                    number={num}
-                    handleCellUpdate={this.handleUpdateCell}
-                    static={
-                      this.state.originalBoard[rowIndex][colIndex] !== 0
-                        ? true
-                        : false
-                    }
-                    prevElementFocus={this.state.prevElementFocus}
-                    isMobile={this.state.isMobile}
-                    checkExistingNumbers={(
-                      number: number,
-                      incorrect: boolean
-                    ) => this.checkExistingNumbers(number, incorrect)}
-                    uncheckExistingNumbers={() => this.uncheckExistingNumbers()}
-                  />
-                ))}
-              </div>
-            );
-          })}
-        </div>
-        {this.state.isMobile ? (
-          <div className="center-row-flex">
-            <button
-              className="basic-button question"
-              onClick={() => this.handleSolve()}
-            >
-              <AiOutlineCheck /> Solve
-            </button>
-            <button
-              className="basic-button question"
-              onClick={() => this.handleReset()}
-            >
-              <AiOutlineUndo /> Reset
-            </button>{" "}
+        <div className="center-row-flex">
+          <div className="grid">
+            {this.state.board.map((row, rowIndex) => {
+              return (
+                <div className="grid-row" key={rowIndex}>
+                  {row.map((num, colIndex) => (
+                    <Cell
+                      key={colIndex}
+                      rowIndex={rowIndex}
+                      colIndex={colIndex}
+                      number={num}
+                      notes={this.state.notes[rowIndex][colIndex]}
+                      handleCellUpdate={this.handleUpdateCell}
+                      handleUpdateNotes={this.handleUpdateNotes}
+                      static={
+                        this.state.originalBoard[rowIndex][colIndex] !== 0
+                          ? true
+                          : false
+                      }
+                      prevElementFocus={this.state.prevElementFocus}
+                      isMobile={this.state.isMobile}
+                      isNoteMode={this.state.isNoteMode}
+                      checkExistingNumbers={(
+                        number: number,
+                        incorrect: boolean
+                      ) => this.checkExistingNumbers(number, incorrect)}
+                      uncheckExistingNumbers={() =>
+                        this.uncheckExistingNumbers()
+                      }
+                    />
+                  ))}
+                </div>
+              );
+            })}
           </div>
-        ) : null}
-        {this.state.isMobile ? (
-          <Inputs prevElementFocus={this.state.prevElementFocus} />
-        ) : (
-          <></>
-        )}
+          {this.state.displayKeyboard ? (
+            <Inputs
+              prevElementFocus={this.state.prevElementFocus}
+              isMobile={this.state.isMobile}
+            />
+          ) : null}
+        </div>
+        <div className="center-row-flex header-row-options ">
+          <div className="space-between-flex footer-row-options">
+            <button
+              className="basic-button"
+              onClick={() => this.handleNoteMode()}
+              id={"note-mode-toggle"}
+            >
+              Note Mode: {this.state.isNoteMode ? "On" : "Off"}
+            </button>
+            <div>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleSolve()}
+              >
+                <AiOutlineCheck /> Solve
+              </button>
+              <button
+                className="basic-button question"
+                onClick={() => this.handleReset()}
+              >
+                <AiOutlineUndo /> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* {(this.state.isMobile && this.state.displayKeyboard) ? (
+          <Inputs
+            prevElementFocus={this.state.prevElementFocus}
+            isMobile={this.state.isMobile}
+          />
+        ) : null} */}
         {this.state.displayHelp && (
           <Help handleCloseModal={() => this.handleDisplayHelp()}></Help>
         )}
