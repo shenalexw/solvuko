@@ -91,17 +91,16 @@ export default class Cell extends React.Component<Props, State> {
           return;
       }
 
-      if (newColIndex < 0 || newColIndex > 8) {
+      if (
+        newColIndex < 0 ||
+        newColIndex > 8 ||
+        newRowIndex < 0 ||
+        newRowIndex > 8
+      ) {
         return;
       }
 
-      const cellId =
-        newRowIndex < 0
-          ? "drop-down-menu"
-          : newRowIndex > 8
-          ? "note-mode-toggle"
-          : `${newRowIndex}:${newColIndex}`;
-
+      const cellId = `${newRowIndex}:${newColIndex}`;
       const cell = document.getElementById(cellId);
       if (cell !== null) {
         cell!.focus();
