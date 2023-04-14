@@ -5,15 +5,19 @@
 }
 
 .drop-down-button-col {
+  font-size: 0;
+  letter-spacing: -100px;
   position: absolute;
   margin-top: 39px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   border-radius: 0px 0px 12px 12px;
   border-left: gray 2px solid;
   border-right: gray 2px solid;
   border-bottom: gray 2px solid;
+  background-color: #d9d0b5;
 }
 
 .drop-down-current {
@@ -60,4 +64,14 @@
 
 .drop-down:focus {
   outline: none;
+}
+
+@media screen and (max-width: 480px) {
+  .drop-down-button:hover {
+    background-color: #d9d0b5;
+  }
+
+  .drop-down-current:hover {
+    background-color: #d9d0b5;
+  }
 }
